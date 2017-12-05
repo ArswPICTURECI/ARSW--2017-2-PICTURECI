@@ -23,7 +23,7 @@ public class Game {
     public static final int RANDOM = 99;
     public static final int NORMAL = 100;
 
-    protected static final int MAX_DIB = 1;
+    protected static final int MAX_DIB = 2;
     protected static final int MAX_ADV = 1;
 
     protected int count_dibujan;
