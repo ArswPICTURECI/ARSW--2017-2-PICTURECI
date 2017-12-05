@@ -22,6 +22,12 @@ public class Player {
         this.room = room;
         this.score = 0;
     }
+    public Player(String name, int room, int rol,int score) {
+        this.name = name;
+        this.rol = rol;
+        this.room = room;
+        this.score = score;
+    }
 
     public String getName() {
         return name;
@@ -52,7 +58,7 @@ public class Player {
     }
 
     public void setScore(int score) {
-        this.score = score;
+        this.score = this.score+score;
     }
 
     @Override

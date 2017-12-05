@@ -107,6 +107,14 @@ public class Game {
             players.putIfAbsent(player.getName(), player);
         }
     }
+    
+    public void setPlayerScore(Player player) throws GameException{
+        if(player.getRol()==DIBUJAN){
+            player.setScore(100);            
+        }else if (player.getRol()==ADIVINAN){
+            player.setScore(50);        
+        }      
+    }
 
     public void deletePlayer(String user) throws GameException {
         if (players.containsKey(user)) {

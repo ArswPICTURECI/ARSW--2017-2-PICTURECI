@@ -35,7 +35,7 @@ var app = (function () {
         return $.ajax({
             url: "/pictureci/normalMode/" + gameid,
             type: "PUT",
-            data: word,
+            data: word, //"{"name":x.name,"bvjdfnv":jhvsbdj}
             contentType: "application/json"
         });
     };
@@ -198,6 +198,9 @@ var app = (function () {
                 alert("El usuario no puede estar vacio!!");
             }
         },
+        
+
+        
         cancelQueue: function () {
             document.getElementById("messageCancel").innerHTML = "";
             document.getElementById("cancelqueuebtn").innerHTML = "";
@@ -327,6 +330,17 @@ var app = (function () {
                         }
                     }, 1000);
         },
+        putScore: function (dato) {
+            $.ajax({
+                url: "/players",
+                type: 'PUT',
+                data: "{'name':"+dato.name+",'rol':"+dato.rol+",'room':"+dato.room+",'score':"+dato.score+"}",
+                contentType: "application/json"
+            });
+
+            
+        },
+        
         queryUsers: function () {
             $.get("/users/", callback);
         },

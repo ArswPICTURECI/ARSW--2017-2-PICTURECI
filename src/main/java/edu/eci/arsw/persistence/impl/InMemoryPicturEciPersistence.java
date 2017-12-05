@@ -7,6 +7,7 @@ package edu.eci.arsw.persistence.impl;
 
 import edu.eci.arsw.model.FinishedGame;
 import edu.eci.arsw.model.Game;
+import edu.eci.arsw.model.Player;
 import edu.eci.arsw.model.User;
 //import edu.eci.arsw.persistence.DrawingNotFoundException;
 //import edu.eci.arsw.persistence.DrawingPersistenceException;
@@ -86,5 +87,10 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     @Override
     public List<Game> getFinishedGames() throws PersistenceException {
         return finishedGames.stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public void setScore(Player player) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -188,4 +188,9 @@ public class PictureciInMemoryCache implements PictureciCache {
                 throw new CacheException("Invalid State");
         }
     }
+
+    @Override
+    public void setScore(Player player) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
