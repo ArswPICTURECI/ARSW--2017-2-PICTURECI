@@ -54,7 +54,7 @@ public class PlayerResourceController {
             boolean ready = pes.gameReady(gameid, Game.NORMAL);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Dibuja");
             if (ready) {
-                Thread.sleep(200);
+                Thread.sleep(500);
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.DIBUJAN);
             }
@@ -75,7 +75,7 @@ public class PlayerResourceController {
             boolean ready = pes.gameReady(gameid, Game.NORMAL);
             System.out.println("Jugador Agregado Sala (" + gameid + ") + : " + user + " Rol: Adivina");
             if (ready) {
-                Thread.sleep(200);
+                Thread.sleep(500);
                 System.out.println("Game: " + gameid + " is ready");
                 msmt.convertAndSend("/topic/ready." + gameid, Game.ADIVINAN);
             }

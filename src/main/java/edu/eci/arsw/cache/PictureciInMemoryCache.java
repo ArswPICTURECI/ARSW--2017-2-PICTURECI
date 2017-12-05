@@ -62,16 +62,19 @@ public class PictureciInMemoryCache implements PictureciCache {
 
     @Override
     public void addPlayer(int gameid, Player player) throws CacheException {
-        if (gamesState.containsKey(gameid)) {
-            try {
-                gamesState.get(gameid).addPlayer(player);
-            } catch (GameException ex) {
-                Logger.getLogger(PictureciInMemoryCache.class.getName()).log(Level.SEVERE, null, ex);
-                throw new CacheException(ex.getMessage());
+        synchronized (gamesState) {
+            if (gamesState.containsKey(gameid)) {
+                try {
+                    gamesState.get(gameid).addPlayer(player);
+                } catch (GameException ex) {
+                    Logger.getLogger(PictureciInMemoryCache.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new CacheException(ex.getMessage());
+                }
+            } else {
+                throw new CacheException("NO hay juego");
             }
-        } else {
-            throw new CacheException("NO hay juego");
         }
+
     }
 
     @Override
@@ -91,20 +94,22 @@ public class PictureciInMemoryCache implements PictureciCache {
 
     @Override
     public void deletePlayer(int gameid, String player) throws CacheException {
-        if (gamesState.containsKey(gameid)) {
-            try {
-                gamesState.get(gameid).deletePlayer(player);
-            } catch (GameException ex) {
-                throw new CacheException("Partida: " + gameid + " - " + ex.getMessage());
+        synchronized (gamesState) {
+            if (gamesState.containsKey(gameid)) {
+                try {
+                    gamesState.get(gameid).deletePlayer(player);
+                } catch (GameException ex) {
+                    throw new CacheException("Partida: " + gameid + " - " + ex.getMessage());
+                }
+            } else if (gamesState.containsKey((-1) * gameid)) {
+                try {
+                    gamesState.get((-1) * gameid).deletePlayer(player);
+                } catch (GameException ex) {
+                    throw new CacheException("Partida Aleatoria: " + gameid + " - " + ex.getMessage());
+                }
+            } else {
+                throw new CacheException("El juego " + gameid + " no existe");
             }
-        } else if (gamesState.containsKey((-1) * gameid)) {
-            try {
-                gamesState.get((-1) * gameid).deletePlayer(player);
-            } catch (GameException ex) {
-                throw new CacheException("Partida Aleatoria: " + gameid + " - " + ex.getMessage());
-            }
-        } else {
-            throw new CacheException("El juego " + gameid + " no existe");
         }
     }
 
@@ -121,16 +126,14 @@ public class PictureciInMemoryCache implements PictureciCache {
                 } catch (GameException ex) {
                     throw new CacheException(ex.getMessage());
                 }
+            } else if (randomgame.ready()) {
+                ++lastRandomRoom;
             } else {
-                if (randomgame.ready()) {
-                    ++lastRandomRoom;
-                } else {
-                    try {
-                        randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
-                        break;
-                    } catch (GameException ex) {
-                        throw new CacheException(ex.getMessage());
-                    }
+                try {
+                    randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
+                    break;
+                } catch (GameException ex) {
+                    throw new CacheException(ex.getMessage());
                 }
             }
         }
@@ -166,16 +169,20 @@ public class PictureciInMemoryCache implements PictureciCache {
     public boolean tryWord(int gameid, int mode, DrawingGuess attempt) throws CacheException {
         switch (mode) {
             case Game.RANDOM:
-                if (gamesState.containsKey((-1) * gameid)) {
-                    return gamesState.get((-1) * gameid).tryWord(attempt);
-                } else {
-                    throw new CacheException("El Juego aleagorio: " + gameid + " no existe");
+                synchronized (gamesState) {
+                    if (gamesState.containsKey((-1) * gameid)) {
+                        return gamesState.get((-1) * gameid).tryWord(attempt);
+                    } else {
+                        throw new CacheException("El Juego aleagorio: " + gameid + " no existe");
+                    }
                 }
             case Game.NORMAL:
-                if (gamesState.containsKey(gameid)) {
-                    return gamesState.get(gameid).tryWord(attempt);
-                } else {
-                    throw new CacheException("El Juego: " + gameid + " no existe");
+                synchronized (gamesState) {
+                    if (gamesState.containsKey(gameid)) {
+                        return gamesState.get(gameid).tryWord(attempt);
+                    } else {
+                        throw new CacheException("El Juego: " + gameid + " no existe");
+                    }
                 }
             default:
                 throw new CacheException("Invalid State");
