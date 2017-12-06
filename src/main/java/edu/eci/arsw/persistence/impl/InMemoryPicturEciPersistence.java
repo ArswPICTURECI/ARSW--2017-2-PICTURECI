@@ -76,7 +76,9 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
 
     @Override
     public void addFinishedGame(int gameid, Game game) throws PersistenceException {
-        finishedGames.add(new FinishedGame(game, gameid));
+        synchronized (finishedGames) {
+            finishedGames.add(new FinishedGame(game, gameid));
+        }
     }
 
     @Override

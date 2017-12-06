@@ -32,7 +32,9 @@ public class PictureciInMemoryCache implements PictureciCache {
     @Override
     public void createGame(int gameid, String word) throws CacheException {
         Game new_game = new Game(word);
-        gamesState.putIfAbsent(gameid, new_game);
+        synchronized (gamesState) {
+            gamesState.putIfAbsent(gameid, new_game);
+        }
     }
 
     @Override
@@ -115,25 +117,27 @@ public class PictureciInMemoryCache implements PictureciCache {
 
     @Override
     public int joinRandomGame(String user) throws CacheException {
-        while (true) {
-            Game randomgame = gamesState.get((-1) * lastRandomRoom);
-            if (randomgame == null) {
-                try {
-                    randomgame = new RandomGame("perro");
-                    randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
-                    gamesState.putIfAbsent((-1) * lastRandomRoom, randomgame);
-                    break;
-                } catch (GameException ex) {
-                    throw new CacheException(ex.getMessage());
-                }
-            } else if (randomgame.ready()) {
-                ++lastRandomRoom;
-            } else {
-                try {
-                    randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
-                    break;
-                } catch (GameException ex) {
-                    throw new CacheException(ex.getMessage());
+        synchronized (gamesState) {
+            while (true) {
+                Game randomgame = gamesState.get((-1) * lastRandomRoom);
+                if (randomgame == null) {
+                    try {
+                        randomgame = new RandomGame("perro");
+                        randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
+                        gamesState.putIfAbsent((-1) * lastRandomRoom, randomgame);
+                        break;
+                    } catch (GameException ex) {
+                        throw new CacheException(ex.getMessage());
+                    }
+                } else if (randomgame.ready()) {
+                    ++lastRandomRoom;
+                } else {
+                    try {
+                        randomgame.addPlayer(new Player(user, (-1) * lastRandomRoom, RandomGame.RANDOM_ROL));
+                        break;
+                    } catch (GameException ex) {
+                        throw new CacheException(ex.getMessage());
+                    }
                 }
             }
         }
@@ -147,45 +151,49 @@ public class PictureciInMemoryCache implements PictureciCache {
 
     @Override
     public boolean checkIfReady(int gameid, int mode) throws CacheException {
-        switch (mode) {
-            case Game.NORMAL:
-                if (gamesState.containsKey(gameid)) {
-                    return gamesState.get(gameid).ready();
-                } else {
-                    throw new CacheException("El juego " + gameid + " no existe");
-                }
-            case Game.RANDOM:
-                if (gamesState.containsKey((-1) * gameid)) {
-                    return gamesState.get((-1) * gameid).ready();
-                } else {
-                    throw new CacheException("El juego aleatorio" + gameid + " no existe");
-                }
-            default:
-                throw new CacheException("Invalid State game: " + gameid);
+        synchronized (gamesState) {
+            switch (mode) {
+                case Game.NORMAL:
+                    if (gamesState.containsKey(gameid)) {
+                        return gamesState.get(gameid).ready();
+                    } else {
+                        throw new CacheException("El juego " + gameid + " no existe");
+                    }
+                case Game.RANDOM:
+                    if (gamesState.containsKey((-1) * gameid)) {
+                        return gamesState.get((-1) * gameid).ready();
+                    } else {
+                        throw new CacheException("El juego aleatorio" + gameid + " no existe");
+                    }
+                default:
+                    throw new CacheException("Invalid State game: " + gameid);
+            }
         }
     }
 
     @Override
     public boolean tryWord(int gameid, int mode, DrawingGuess attempt) throws CacheException {
-        switch (mode) {
-            case Game.RANDOM:
-                synchronized (gamesState) {
-                    if (gamesState.containsKey((-1) * gameid)) {
-                        return gamesState.get((-1) * gameid).tryWord(attempt);
-                    } else {
-                        throw new CacheException("El Juego aleagorio: " + gameid + " no existe");
+        synchronized (gamesState) {
+            switch (mode) {
+                case Game.RANDOM:
+                    synchronized (gamesState) {
+                        if (gamesState.containsKey((-1) * gameid)) {
+                            return gamesState.get((-1) * gameid).tryWord(attempt);
+                        } else {
+                            throw new CacheException("El Juego aleagorio: " + gameid + " no existe");
+                        }
                     }
-                }
-            case Game.NORMAL:
-                synchronized (gamesState) {
-                    if (gamesState.containsKey(gameid)) {
-                        return gamesState.get(gameid).tryWord(attempt);
-                    } else {
-                        throw new CacheException("El Juego: " + gameid + " no existe");
+                case Game.NORMAL:
+                    synchronized (gamesState) {
+                        if (gamesState.containsKey(gameid)) {
+                            return gamesState.get(gameid).tryWord(attempt);
+                        } else {
+                            throw new CacheException("El Juego: " + gameid + " no existe");
+                        }
                     }
-                }
-            default:
-                throw new CacheException("Invalid State");
+                default:
+                    throw new CacheException("Invalid State");
+            }
         }
     }
 

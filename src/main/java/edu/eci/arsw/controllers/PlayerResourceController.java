@@ -9,7 +9,6 @@ import edu.eci.arsw.cache.CacheException;
 import edu.eci.arsw.model.Game;
 import edu.eci.arsw.model.Player;
 import edu.eci.arsw.services.PicturEciServices;
-import static java.util.Collections.list;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -136,6 +135,4 @@ public class PlayerResourceController {
         //sgsg
         return new ResponseEntity<>(pes.getPlayersFrom(1, Game.NORMAL), HttpStatus.OK);
     }
-
-
 }
