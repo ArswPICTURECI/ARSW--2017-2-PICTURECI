@@ -33,10 +33,11 @@ A possible future advance in the architecture is considered to guarantee availab
 
 ## Logical architecture overview.jpg
 
+![](IMG/ArquitecturaLogicaPictureci.png)
 ![](IMG/2.2Logicalarchitectureoverview.jpg)
 
 ## Physical architecture overview
-![](IMG/2.3Physicalarchitectureoverview.jpg)
+![](IMG/2.3Physicalarchitectureoverview.png)
   
 ## Link Google Drive: https://drive.google.com/drive/folders/0B_4JeHYUqRALdlFEZU01QUZ2WU0?usp=sharing (Only for teacher and autor )
 
