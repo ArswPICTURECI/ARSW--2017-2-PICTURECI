@@ -110,4 +110,11 @@ public class PicturEciServices {
     public boolean tryWord(int gameid, int mode, DrawingGuess attempt) throws CacheException {
         return cache.tryWord(gameid, mode, attempt);
     }
+    
+    //Finished Games
+    public List<Game>getFinishedGames() throws PersistenceException{
+        return pep.getFinishedGames();
+    }
+    
+    
 }

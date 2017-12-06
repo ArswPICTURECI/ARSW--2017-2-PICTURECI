@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Consulta de Juegos</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="/assets/css/bg.css" type="text/css"/>
+        <link rel="stylesheet" href="/assets/css/partida.css" type="text/css"/>
+        <link rel="stylesheet" href="/assets/css/registro.css" type="text/css"/>
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="/js/App.js"></script>
+    </head>
+    <body>
+        <h1>Partidas Jugadas Pictureci</h1>
+        <br>
+        <form>
+            <div>
+                <div id="finishedGameTable" class="finishedGameTable">
+
+                    <br>
+                    <table id="tablaFinishedGames" border="1" style="width:50%" class="tabla">
+                        <thead>
+                            <tr>
+                                <th>Sala</th>
+                                <th>Ganador</th>
+                                <th>Jugadores</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>    
+                    </table>
+                    <br>
+                </div>
+                <button type="button" onclick="app.queryGames()" style="text-align:center">Consultar partidas Jugadas</button>
+                <br>
+                <br>
+                <button type="button" onclick="app.backToGameMode()" style="text-align:center">Regresar</button>
+            </div>
+        </form>
+    </body>
+</html>

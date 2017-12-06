@@ -45,6 +45,16 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+    
+    @RequestMapping(value= "/finishedGames", method = RequestMethod.GET)
+    public ResponseEntity<?>getFinishedGames(){
+        try {
+            return new ResponseEntity<>(pes.getFinishedGames(), HttpStatus.OK);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
 
     @RequestMapping(value = "/normalMode/{gameid}", method = RequestMethod.PUT)
     public ResponseEntity<?> createOrUpdateGame(@PathVariable Integer gameid, @RequestBody String word) {

@@ -16,6 +16,35 @@ var app = (function () {
         }
         );
     };
+    callbackPlayers = function (lista) {
+        $("#tabla tbody").empty();
+        lista.map(function (ur) {
+            $(document).ready(function () {
+                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.room + "</td><td>" + getRolString(ur.rol) + "</td><td>" + ur.score + "</td></tr>";
+                $("#tabla tbody").append(markup);
+            });
+        }
+        );
+    };
+    callbackFinishedGames=function (lista){
+        $("#tablaFinishedGames tbody").empty();
+        lista.map(function (ur) {
+            $(document).ready(function () {
+                var markup = "<tr><td>" + ur.room + "</td><td>" + ur.winner + "</td><td>" + getFinishedGamePlayers(ur.players) +"</td></tr>";
+                $("#tablaFinishedGames tbody").append(markup);
+            });
+        }
+        );
+    };
+    
+    function getFinishedGamePlayers(l){
+        var res=[];
+        l.map(function (pl){
+            var players="{"+pl.name+" jugó con rol "+getRolString(pl.rol)+"}";
+            res.push(players);
+        });
+        return res;
+    };
 
     function getRolString(num) {
         if (num === -1) {
@@ -133,18 +162,6 @@ var app = (function () {
                 });
             });
         });
-    };
-
-
-    callbackPlayers = function (lista) {
-        $("#tabla tbody").empty();
-        lista.map(function (ur) {
-            $(document).ready(function () {
-                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.room + "</td><td>" + getRolString(ur.rol) + "</td><td>" + ur.score + "</td></tr>";
-                $("#tabla tbody").append(markup);
-            });
-        }
-        );
     };
 
     return{
@@ -346,6 +363,12 @@ var app = (function () {
         },
         queryPlayers: function () {
             $.get("/players/" + $("#topic").val(), callbackPlayers);
+        },
+        queryGames:function (){
+            $.get("/pictureci/finishedGames",callbackFinishedGames);
+        },
+        finishedGames:function (){
+            location.href="finishedGames.html";
         },
         registro: function () {
             location.href = "registerUser.html";
