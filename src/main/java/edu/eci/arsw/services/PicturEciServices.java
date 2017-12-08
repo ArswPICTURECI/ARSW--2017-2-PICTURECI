@@ -45,8 +45,8 @@ public class PicturEciServices {
         pep.registerUser(user);
     }
 
-    public void removeFromCache(int gameid) throws CacheException {
-        cache.deleteGame(gameid);
+    public void removeFromCache(int gameid, int mode) throws CacheException {
+        cache.deleteGame(gameid, mode);
     }
 
     public List<User> getAllUsers() {

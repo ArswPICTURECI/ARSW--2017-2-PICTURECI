@@ -58,8 +58,19 @@ public class PictureciInMemoryCache implements PictureciCache {
     }
 
     @Override
-    public void deleteGame(int gameid) throws CacheException {
-        gamesState.remove(gameid);
+    public void deleteGame(int gameid, int mode) throws CacheException {
+        synchronized (gamesState) {
+            switch (mode) {
+                case Game.NORMAL:
+                    gamesState.remove(gameid);
+                    break;
+                case Game.RANDOM:
+                    gamesState.remove((-1) * gameid);
+                    break;
+                default:
+                    throw new CacheException("Game not found - Invalid State");
+            }
+        }
     }
 
     @Override

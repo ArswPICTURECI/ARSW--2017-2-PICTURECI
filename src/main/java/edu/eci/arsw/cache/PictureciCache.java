@@ -22,7 +22,7 @@ public interface PictureciCache {
     
     public void addPlayer(int gameid, Player player) throws CacheException;
 
-    public void deleteGame(int gameid) throws CacheException;
+    public void deleteGame(int gameid, int mode) throws CacheException;
     
     public List<Game> getAllGames() throws CacheException;
     

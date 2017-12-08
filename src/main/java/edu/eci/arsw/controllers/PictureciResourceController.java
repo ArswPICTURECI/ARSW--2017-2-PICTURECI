@@ -45,9 +45,9 @@ public class PictureciResourceController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-    
-    @RequestMapping(value= "/finishedGames", method = RequestMethod.GET)
-    public ResponseEntity<?>getFinishedGames(){
+
+    @RequestMapping(value = "/finishedGames", method = RequestMethod.GET)
+    public ResponseEntity<?> getFinishedGames() {
         try {
             return new ResponseEntity<>(pes.getFinishedGames(), HttpStatus.OK);
         } catch (PersistenceException ex) {
@@ -76,7 +76,7 @@ public class PictureciResourceController {
                 Game current = pes.getCurrentGame(gameid, Game.NORMAL);
                 current.setWinner(attempt.getUsername());
                 pes.addFinishedGame(gameid, current);
-                pes.removeFromCache(gameid);
+                pes.removeFromCache(gameid, Game.NORMAL);
                 System.out.print("Normal Game Finished: " + gameid);
                 msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
             }
@@ -99,7 +99,7 @@ public class PictureciResourceController {
                 Game in_game = pes.getCurrentGame(gameid, Game.RANDOM);
                 in_game.setWinner(attempt.getUsername());
                 pes.addFinishedGame(gameid, in_game);
-                pes.removeFromCache(gameid);
+                pes.removeFromCache(gameid, Game.RANDOM);
                 System.out.print("Random Game Finished: " + gameid);
                 msmt.convertAndSend("/topic/winner-" + gameid, attempt.getUsername());
             }
