@@ -97,7 +97,7 @@ public class PlayerResourceController {
             int rol = pes.joinRandomGame(user);
             System.out.println("Usuario :" + user + " agregado a sala aleatoria");
             if (pes.gameReady(subscription, Game.RANDOM)) {
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 System.out.println("Game: " + subscription + " is ready");
                 msmt.convertAndSend("/topic/rndready." + subscription, rol);
             }

@@ -10,6 +10,7 @@ and open the template in the editor.
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
         <link rel="stylesheet" href="/assets/css/rapida.css" type="text/css"/>
+        <link rel="stylesheet" href="/assets/css/gamePanel.css" type="text/css"/>
         <link rel="stylesheet" href="assets/css/bg.css" />
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
@@ -27,11 +28,25 @@ and open the template in the editor.
         <h1 id="whatToDraw">Dibuja un perro</h1>
         <br>
         <br>
-        <div>
-            <p>Tiempo Restante:<p> 
+        <div id="gameTable">
+            <!--<p>Tiempo Restante:<p> 
             <p id="Restante">180</p> 
-            <p>Segundos</p> 
-        </div>
+            <p>Segundos</p> -->
+            <table id="tablaGame" border="1" style="width:50%" class="tabla">
+                <thead>
+                    <tr>
+                        <th>Tiempo Restante(s)</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p id="Restante">180</p> 
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>    
+            </table>
+        </div><br>
         <canvas class="canvas" id="myCanvas" width="800" height="600"></canvas>        
         <br>
         <button type="button" onclick="tableroapp.erase()" >Borrar Todo</button>
