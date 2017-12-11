@@ -23,7 +23,8 @@ var app = (function () {
         $("#tabla tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.room + "</td><td>" + getRolString(ur.rol) + "</td><td>" + ur.score + "</td></tr>";
+                //var markup = "<tr><td>" + ur.name + "</td><td>" + ur.room + "</td><td>" + getRolString(ur.rol) + "</td><td>" + ur.score + "</td></tr>";
+                var markup = "<tr><td>" + ur.name + "</td><td>" + ur.room + "</td><td>" + getRolString(ur.rol) + "</td></tr>";
                 $("#tabla tbody").append(markup);
             });
         }
@@ -43,7 +44,7 @@ var app = (function () {
     function getFinishedGamePlayers(l) {
         var res = [];
         l.map(function (pl) {
-            var players = "{" + pl.name + " jugó con rol " + getRolString(pl.rol) + "}";
+            var players = "{" + pl.name + " jugó con rol " + getRolString(pl.rol) + " y con puntaje de "+ pl.score +"}";
             res.push(players);
         });
         return res;
