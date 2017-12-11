@@ -29,7 +29,7 @@ with limited time, complicated objects, and many other things.
 
 A possible future advance in the architecture is considered to guarantee availability, and scalability. A posbile architecture of the same would be this:  
 
-![](IMG/diagrama.jpg)
+![](IMG/diagrama.png)
 
 ## Logical architecture overview.jpg
 

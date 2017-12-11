@@ -140,7 +140,7 @@ var tableroapp = (function () {
                 canvas.addEventListener('mousedown', hc, false);
                 canvas.addEventListener('mouseup', nc, false);
                 canvas.addEventListener('mousemove', function (evt) {
-                    if (flagPaint == false) {
+                    if (flagPaint === false) {
 
                     } else {
                         var mousePos = getMousePos(canvas, evt);
