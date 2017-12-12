@@ -29,7 +29,7 @@ public class Game {
     protected int count_dibujan;
     protected int count_adivinan;
     protected String word;
-    protected String winner;
+    protected int winner;
 
     protected ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
 
@@ -37,7 +37,7 @@ public class Game {
         this.count_adivinan = 0;
         this.count_dibujan = 0;
         this.word = word;
-        this.winner = "";
+        this.winner = DIBUJAN;
     }
 
     protected Game(Game game) {
@@ -84,11 +84,11 @@ public class Game {
         this.word = word;
     }
 
-    public String getWinner() {
+    public int getWinner() {
         return winner;
     }
 
-    public void setWinner(String winner) {
+    public void setWinner(int winner) {
         this.winner = winner;
     }
 

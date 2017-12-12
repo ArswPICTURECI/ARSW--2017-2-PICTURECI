@@ -90,9 +90,4 @@ public class InMemoryPicturEciPersistence implements PicturEciPersistence {
     public List<Game> getFinishedGames() throws PersistenceException {
         return finishedGames.stream().collect(Collectors.toList());
     }
-
-    @Override
-    public void setScore(Player player) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

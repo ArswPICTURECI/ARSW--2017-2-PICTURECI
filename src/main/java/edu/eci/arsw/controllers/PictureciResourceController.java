@@ -72,9 +72,10 @@ public class PictureciResourceController {
         try {
             boolean win = pes.tryWord(gameid, Game.NORMAL, attempt);
             System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
+            System.out.println("Intento: " + attempt.getTimer());
             if (win) {
                 Game current = pes.getCurrentGame(gameid, Game.NORMAL);
-                current.setWinner(attempt.getUsername());
+                current.setWinner(Game.ADIVINAN);
                 pes.addFinishedGame(gameid, current);
                 pes.removeFromCache(gameid, Game.NORMAL);
                 System.out.print("Normal Game Finished: " + gameid);
@@ -97,7 +98,7 @@ public class PictureciResourceController {
             System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
             if (win) {
                 Game in_game = pes.getCurrentGame(gameid, Game.RANDOM);
-                in_game.setWinner(attempt.getUsername());
+                in_game.setWinner(Game.ADIVINAN);
                 pes.addFinishedGame(gameid, in_game);
                 pes.removeFromCache(gameid, Game.RANDOM);
                 System.out.print("Random Game Finished: " + gameid);

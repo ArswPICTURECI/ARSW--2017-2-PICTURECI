@@ -87,7 +87,6 @@ public class PictureciInMemoryCache implements PictureciCache {
                 throw new CacheException("NO hay juego");
             }
         }
-
     }
 
     @Override
@@ -162,49 +161,49 @@ public class PictureciInMemoryCache implements PictureciCache {
 
     @Override
     public boolean checkIfReady(int gameid, int mode) throws CacheException {
-        synchronized (gamesState) {
-            switch (mode) {
-                case Game.NORMAL:
+        switch (mode) {
+            case Game.NORMAL:
+                synchronized (gamesState) {
                     if (gamesState.containsKey(gameid)) {
                         return gamesState.get(gameid).ready();
                     } else {
                         throw new CacheException("El juego " + gameid + " no existe");
                     }
-                case Game.RANDOM:
+                }
+            case Game.RANDOM:
+                synchronized (gamesState) {
                     if (gamesState.containsKey((-1) * gameid)) {
                         return gamesState.get((-1) * gameid).ready();
                     } else {
                         throw new CacheException("El juego aleatorio" + gameid + " no existe");
                     }
-                default:
-                    throw new CacheException("Invalid State game: " + gameid);
-            }
+                }
+            default:
+                throw new CacheException("Invalid State game: " + gameid);
         }
     }
 
     @Override
     public boolean tryWord(int gameid, int mode, DrawingGuess attempt) throws CacheException {
-        synchronized (gamesState) {
-            switch (mode) {
-                case Game.RANDOM:
-                    synchronized (gamesState) {
-                        if (gamesState.containsKey((-1) * gameid)) {
-                            return gamesState.get((-1) * gameid).tryWord(attempt);
-                        } else {
-                            throw new CacheException("El Juego aleagorio: " + gameid + " no existe");
-                        }
+        switch (mode) {
+            case Game.RANDOM:
+                synchronized (gamesState) {
+                    if (gamesState.containsKey((-1) * gameid)) {
+                        return gamesState.get((-1) * gameid).tryWord(attempt);
+                    } else {
+                        throw new CacheException("El Juego aleagorio: " + gameid + " no existe");
                     }
-                case Game.NORMAL:
-                    synchronized (gamesState) {
-                        if (gamesState.containsKey(gameid)) {
-                            return gamesState.get(gameid).tryWord(attempt);
-                        } else {
-                            throw new CacheException("El Juego: " + gameid + " no existe");
-                        }
+                }
+            case Game.NORMAL:
+                synchronized (gamesState) {
+                    if (gamesState.containsKey(gameid)) {
+                        return gamesState.get(gameid).tryWord(attempt);
+                    } else {
+                        throw new CacheException("El Juego: " + gameid + " no existe");
                     }
-                default:
-                    throw new CacheException("Invalid State");
-            }
+                }
+            default:
+                throw new CacheException("Invalid State");
         }
     }
 

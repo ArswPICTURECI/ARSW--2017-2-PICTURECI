@@ -5,6 +5,9 @@
  */
 
 var app = (function () {
+
+    var numero;
+
     var callback = function (lista) {
 
         $("#tablaUsers tbody").empty();
@@ -26,25 +29,26 @@ var app = (function () {
         }
         );
     };
-    callbackFinishedGames=function (lista){
+    callbackFinishedGames = function (lista) {
         $("#tablaFinishedGames tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                var markup = "<tr><td>" + ur.room + "</td><td>" + ur.winner + "</td><td>" + getFinishedGamePlayers(ur.players) +"</td></tr>";
+                var markup = "<tr><td>" + ur.room + "</td><td>" + ur.winner + "</td><td>" + getFinishedGamePlayers(ur.players) + "</td></tr>";
                 $("#tablaFinishedGames tbody").append(markup);
             });
         }
         );
     };
-    
-    function getFinishedGamePlayers(l){
-        var res=[];
-        l.map(function (pl){
-            var players="{"+pl.name+" jugó con rol "+getRolString(pl.rol)+"}";
+
+    function getFinishedGamePlayers(l) {
+        var res = [];
+        l.map(function (pl) {
+            var players = "{" + pl.name + " jugó con rol " + getRolString(pl.rol) + "}";
             res.push(players);
         });
         return res;
-    };
+    }
+    ;
 
     function getRolString(num) {
         if (num === -1) {
@@ -215,9 +219,6 @@ var app = (function () {
                 alert("El usuario no puede estar vacio!!");
             }
         },
-        
-
-        
         cancelQueue: function () {
             document.getElementById("messageCancel").innerHTML = "";
             document.getElementById("cancelqueuebtn").innerHTML = "";
@@ -314,7 +315,7 @@ var app = (function () {
         attempt: function () {
             var mode = sessionStorage.getItem("mode");
             var cuser = sessionStorage.getItem("currentuser");
-            var att = {"username": cuser, "phrase": $("#guess_input").val()};
+            var att = {"username": cuser, "phrase": $("#guess_input").val(), "timer": numero};
             if (mode === "normal") {
                 var cgame = sessionStorage.getItem("currentgame");
                 return $.ajax({
@@ -334,41 +335,38 @@ var app = (function () {
             }
         },
         tempo: function () {
-            var numero = parseInt($("#Restante").text()),
-                    tiempo = setInterval(function () {
-                        numero = numero - 1;
-                        $("#Restante").text(numero);
-                        if (numero === 0) {
-                            $("#Restante").text("LA PARTIDA HA FINALIZADO");
-                            clearInterval(tiempo);
-                            alert("El tiempo ha finalizado.");
-                            location.href = "GameMode.html";
-                            app.disconnect();
-                        }
-                    }, 1000);
+            numero = parseInt($("#Restante").text());
+            var tiempo = setInterval(function () {
+                numero = numero - 1;
+                $("#Restante").text(numero);
+                if (numero === 0) {
+                    $("#Restante").text("LA PARTIDA HA FINALIZADO");
+                    clearInterval(tiempo);
+                    alert("El tiempo ha finalizado.");
+                    location.href = "GameMode.html";
+                    app.disconnect();
+                }
+            }, 1000);
         },
         putScore: function (dato) {
             $.ajax({
                 url: "/players",
                 type: 'PUT',
-                data: "{'name':"+dato.name+",'rol':"+dato.rol+",'room':"+dato.room+",'score':"+dato.score+"}",
+                data: "{'name':" + dato.name + ",'rol':" + dato.rol + ",'room':" + dato.room + ",'score':" + dato.score + "}",
                 contentType: "application/json"
             });
-
-            
         },
-        
         queryUsers: function () {
             $.get("/users/", callback);
         },
         queryPlayers: function () {
             $.get("/players/" + $("#topic").val(), callbackPlayers);
         },
-        queryGames:function (){
-            $.get("/pictureci/finishedGames",callbackFinishedGames);
+        queryGames: function () {
+            $.get("/pictureci/finishedGames", callbackFinishedGames);
         },
-        finishedGames:function (){
-            location.href="finishedGames.html";
+        finishedGames: function () {
+            location.href = "finishedGames.html";
         },
         registro: function () {
             location.href = "registerUser.html";
