@@ -46,6 +46,7 @@ A possible future advance in the architecture is considered to guarantee availab
 ## Link CircleCI : https://circleci.com/gh/ArswPICTURECI/ARSW--2017-2-PICTURECI
 
 ## Link Heroku app: https://pictureciarsw.herokuapp.com/
+## Link de aplicativo con MongoDB y REDIS: https://github.com/ArswPICTURECI/PICTURECI
 
 
   
