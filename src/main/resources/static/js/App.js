@@ -34,7 +34,13 @@ var app = (function () {
         $("#tablaFinishedGames tbody").empty();
         lista.map(function (ur) {
             $(document).ready(function () {
-                var markup = "<tr><td>" + ur.room + "</td><td>" + ur.winner + "</td><td>" + getFinishedGamePlayers(ur.players) + "</td></tr>";
+                var winner;
+                if(ur.winner === -1){
+                    winner = "Dibujantes";
+                } else {
+                    winner = "Adivinadores";
+                }
+                var markup = "<tr><td>" + ur.room + "</td><td>" + winner + "</td><td>" + getFinishedGamePlayers(ur.players) + "</td></tr>";
                 $("#tablaFinishedGames tbody").append(markup);
             });
         }
