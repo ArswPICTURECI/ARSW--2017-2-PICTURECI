@@ -23,7 +23,7 @@ public class Game {
     public static final int RANDOM = 99;
     public static final int NORMAL = 100;
 
-    protected static final int MAX_DIB = 2;
+    protected static final int MAX_DIB = 1;
     protected static final int MAX_ADV = 1;
 
     protected int count_dibujan;
@@ -73,7 +73,17 @@ public class Game {
     }
 
     public boolean tryWord(DrawingGuess attempt) {
-        return attempt.getPhrase().equalsIgnoreCase(this.word) || attempt.getPhrase().contains(this.word);
+        if (attempt.getPhrase().equalsIgnoreCase(this.word) || attempt.getPhrase().contains(this.word)) {
+            for (Player p : players) {
+                if (p.getRol() == ADIVINAN) {
+                    p.setScore(attempt.getTimer());
+                } else {
+                    p.setScore(0);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public String getWord() {
@@ -98,6 +108,7 @@ public class Game {
                 throw new GameException("Rol Dibujan lleno");
             }
             ++count_dibujan;
+            player.setScore(30);
             players.putIfAbsent(player.getName(), player);
         } else if (player.getRol() == ADIVINAN) {
             if (count_adivinan == MAX_ADV) {
@@ -106,14 +117,6 @@ public class Game {
             ++count_adivinan;
             players.putIfAbsent(player.getName(), player);
         }
-    }
-    
-    public void setPlayerScore(Player player) throws GameException{
-        if(player.getRol()==DIBUJAN){
-            player.setScore(100);            
-        }else if (player.getRol()==ADIVINAN){
-            player.setScore(50);        
-        }      
     }
 
     public void deletePlayer(String user) throws GameException {

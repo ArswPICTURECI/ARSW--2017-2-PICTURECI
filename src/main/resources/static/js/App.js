@@ -44,7 +44,7 @@ var app = (function () {
     function getFinishedGamePlayers(l) {
         var res = [];
         l.map(function (pl) {
-            var players = "{" + pl.name + " jugó con rol " + getRolString(pl.rol) + " y con puntaje de "+ pl.score +"}";
+            var players = "{" + pl.name + " jugó con rol " + getRolString(pl.rol) + " y con puntaje de " + pl.score + "}";
             res.push(players);
         });
         return res;
@@ -61,6 +61,23 @@ var app = (function () {
         }
     }
     ;
+
+    timeOut = function () {
+        var mode = sessionStorage.getItem("mode");
+        if (mode === "normal") {
+            var gameid = sessionStorage.getItem("currentgame");
+            return $.ajax({
+                url: "/pictureci/normalMode/" + gameid + "/timeout",
+                type: "PUT"
+            });
+        } else {
+            var gameid = sessionStorage.getItem("currentrandomid");
+            return $.ajax({
+                url: "/pictureci/randomMode/" + gameid + "/timeout",
+                type: "PUT"
+            });
+        }
+    };
 
     putGame = function () {
         var gameid = $("#topic").val();
@@ -264,7 +281,7 @@ var app = (function () {
             stompClient.connect({}, function (frame) {
                 console.log('Connected to game ' + gameid + ': ' + frame);
                 stompClient.subscribe(prefix + gameid, function (eventbody) {
-                    alert("Winner: " + eventbody.body);
+                    alert("Ganador: " + eventbody.body);
                     //Correccion para salir despues de que alguien gana
                     //No estoy seguro si la alerta se le muestra a todos los usuarios
                     location.href = "GameMode.html";
@@ -343,19 +360,9 @@ var app = (function () {
                 if (numero === 0) {
                     $("#Restante").text("LA PARTIDA HA FINALIZADO");
                     clearInterval(tiempo);
-                    alert("El tiempo ha finalizado.");
-                    location.href = "GameMode.html";
-                    app.disconnect();
+                    timeOut();
                 }
             }, 1000);
-        },
-        putScore: function (dato) {
-            $.ajax({
-                url: "/players",
-                type: 'PUT',
-                data: "{'name':" + dato.name + ",'rol':" + dato.rol + ",'room':" + dato.room + ",'score':" + dato.score + "}",
-                contentType: "application/json"
-            });
         },
         queryUsers: function () {
             $.get("/users/", callback);

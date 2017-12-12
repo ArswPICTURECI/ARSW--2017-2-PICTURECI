@@ -71,16 +71,50 @@ public class PictureciResourceController {
     public ResponseEntity<?> guessDrawingNormalmode(@PathVariable Integer gameid, @RequestBody DrawingGuess attempt) {
         try {
             boolean win = pes.tryWord(gameid, Game.NORMAL, attempt);
-            System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase());
-            System.out.println("Intento: " + attempt.getTimer());
+            System.out.println("Received; Username: " + attempt.getUsername() + " - Phrase: " + attempt.getPhrase() + " - Score: " + attempt.getTimer());
             if (win) {
                 Game current = pes.getCurrentGame(gameid, Game.NORMAL);
                 current.setWinner(Game.ADIVINAN);
                 pes.addFinishedGame(gameid, current);
                 pes.removeFromCache(gameid, Game.NORMAL);
                 System.out.print("Normal Game Finished: " + gameid);
-                msmt.convertAndSend("/topic/winner." + gameid, attempt.getUsername());
+                msmt.convertAndSend("/topic/winner." + gameid, "Adivinadores - " + attempt.getUsername());
             }
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (CacheException | PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/normalMode/{gameid}/timeout", method = RequestMethod.PUT)
+    public ResponseEntity<?> timeOutNormalGame(@PathVariable Integer gameid) {
+        try {
+            Game current = pes.getCurrentGame(gameid, Game.NORMAL);
+            current.setWinner(Game.DIBUJAN);
+            pes.addFinishedGame(gameid, current);
+            pes.removeFromCache(gameid, Game.NORMAL);
+            System.out.print("Normal Game Finished: " + gameid);
+            msmt.convertAndSend("/topic/winner." + gameid, "Dibujantes");
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (CacheException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (PersistenceException ex) {
+            Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_GATEWAY);
+        }
+    }
+
+    @RequestMapping(value = "/randomMode/{gameid}/timeout", method = RequestMethod.PUT)
+    public ResponseEntity<?> timeOutRandomGame(@PathVariable Integer gameid) {
+        try {
+            Game current = pes.getCurrentGame(gameid, Game.RANDOM);
+            current.setWinner(Game.DIBUJAN);
+            pes.addFinishedGame(gameid, current);
+            pes.removeFromCache(gameid, Game.RANDOM);
+            System.out.print("Random Game Finished: " + gameid);
+            msmt.convertAndSend("/topic/winner-" + gameid, "Dibujantes");
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CacheException ex) {
             Logger.getLogger(PictureciResourceController.class.getName()).log(Level.SEVERE, null, ex);
